@@ -13,10 +13,10 @@ function App() {
   }
 
   const text = `5 5
-                1 2 N
-                LMLMLMLMM
-                3 3 E
-                MMRMMRMRRM`;
+1 2 N
+LMLMLMLMM
+3 3 E
+MMRMMRMRRM`;
 
   useEffect(() => {
     const commandsArray = splitCommands(text);

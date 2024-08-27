@@ -8,13 +8,18 @@ interface RoverProps {
 const Rover: React.FC<RoverProps> = ({ rotation, position }) => {
   const CARDINALS = ["N", "E", "S", "W"];
 
+  const MULTIPLIER = 120;
+
   return (
     <div
       className={"rover " + CARDINALS[rotation]}
-      style={{ bottom: position[0] * 120, left: position[1] * 120 }}
+      style={{
+        bottom: position[0] * MULTIPLIER,
+        left: position[1] * MULTIPLIER,
+      }}
     >
       {" "}
-      <img width={120} height={120} src={starfleet} />
+      <img width={MULTIPLIER} height={MULTIPLIER} src={starfleet} />
     </div>
   );
 };

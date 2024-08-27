@@ -7,30 +7,26 @@ interface GridProps {
 
 const Grid: React.FC<GridProps> = ({ commands }) => {
   const [rovers, setRovers] = useState([
-    <Rover rotation={0} position={[1, 2]} />,
-    <Rover rotation={1} position={[3, 3]} />,
+    <Rover key={0} rotation={0} position={[1, 2]} />,
+    <Rover key={1} rotation={1} position={[3, 3]} />,
   ]);
 
   const [gridSize, setGridSize] = useState<[number, number]>([0, 0]);
+  const [currentCommands, setCurrentCommands] = useState<string[][]>([]);
 
   useEffect(() => {
-    console.log(rovers);
-    console.log(commands);
-
     const commandsArray = commands.map((command) => {
       return command.split(" ");
     });
-
-    console.log(commandsArray.length);
-
-    let width = 0;
-    let height = 0;
 
     if (commandsArray.length)
       setGridSize([
         Number(commandsArray[0][0]) + 1,
         Number(commandsArray[0][1]) + 1,
       ]);
+
+    const nextCommands = [...commandsArray];
+    setCurrentCommands(nextCommands.slice(1, nextCommands.length));
   }, [commands]);
 
   return (
