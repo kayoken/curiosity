@@ -1,46 +1,47 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import Rover from "./components/Rover";
+import Logo from "/public/NASA_logo.svg";
+import Grid from "./components/Grid";
 import commands from "./assets/commands.txt";
 
 function App() {
-  const showAlert = () => {
-    prompt("Please enter commands:");
-  };
+  const [currentCommands, setCurrentCommands] = useState<string[]>([]);
 
-  const [currentCommands, setCurrentCommands] = useState("");
+  function splitCommands(commands: string): string[] {
+    const returnVal = commands.split("\n");
+    return returnVal;
+  }
 
-  // function readCommands(commands: string): string[] {
-  //   const returnVal = commands.split("\n");
-  //   return returnVal;
-  // }
-  // console.log(readCommands(commands));
+  const text = `5 5
+                1 2 N
+                LMLMLMLMM
+                3 3 E
+                MMRMMRMRRM`;
 
   useEffect(() => {
-    fetch(commands)
-      .then((r) => r.text())
-      .then((text) => {
-        setCurrentCommands(text);
-        console.log("text decoded:", text);
-      });
+    const commandsArray = splitCommands(text);
+    setCurrentCommands(commandsArray);
   }, []);
+
+  const move = () => {
+    console.log(currentCommands);
+  };
 
   return (
     <>
-      <h1>Curiosity</h1>
+      <h1>
+        <img src={Logo} />
+      </h1>
       <div className="wrapper">
         <header>
-          <div className="plus" onClick={showAlert}>
+          <div className="plus" onClick={move}>
             <button className="add">+</button>
           </div>
         </header>
 
         <div className="plateau">
           <div className="line">
-            <div className="square">
-              <Rover rotation={0} position={[1, 2]} />
-              <Rover rotation={1} position={[3, 3]} />
-            </div>
+            <Grid commands={currentCommands} />
           </div>
         </div>
       </div>
