@@ -6,15 +6,22 @@ interface GridProps {
 }
 
 const Grid: React.FC<GridProps> = ({ commands }) => {
-  const [rovers, setRovers] = useState([
-    <Rover key={0} rotation={0} position={[1, 2]} />,
-    <Rover key={1} rotation={1} position={[3, 3]} />,
-  ]);
-
+  const [roverData, setRoverData] = useState(0);
   const [gridSize, setGridSize] = useState<[number, number]>([0, 0]);
   const [currentCommands, setCurrentCommands] = useState<string[][]>([]);
 
-  useEffect(() => {
+  //   const consumeLine = () => {
+  //     if (currentCommands.length) {
+  //       const nextCommands = [...currentCommands];
+  //       const currentCommand = nextCommands[0];
+  //       setCurrentCommands(nextCommands.slice(1, nextCommands.length));
+  //       return currentCommand;
+  //     }
+
+  //     return [""];
+  //   };
+
+  const setupPlanet = () => {
     const commandsArray = commands.map((command) => {
       return command.split(" ");
     });
@@ -27,7 +34,39 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
 
     const nextCommands = [...commandsArray];
     setCurrentCommands(nextCommands.slice(1, nextCommands.length));
+  };
+
+  const moveRover = () => {
+    if (currentCommands.length > 2) {
+      console.log("works");
+    }
+
+    console.log(currentCommands);
+  };
+
+  useEffect(() => {
+    setupPlanet();
   }, [commands]);
+
+  useEffect(() => {
+    const stepTimer = setTimeout(() => {
+      const nextCommands = [...currentCommands];
+      setCurrentCommands(nextCommands.slice(1, nextCommands.length));
+    }, 4000);
+
+    console.log(currentCommands);
+
+    return () => clearTimeout(stepTimer);
+  }, [currentCommands]);
+
+  const rovers = () => {
+    return (
+      <>
+        <Rover key={0} rotation={"N"} position={[1, 2]} />
+        {/* <Rover key={1} rotation={"E"} position={[3, 3]} /> */}
+      </>
+    );
+  };
 
   return (
     <>
@@ -35,7 +74,7 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
         style={{ width: gridSize[0] * 120, height: gridSize[1] * 120 }}
         className="square"
       >
-        {rovers}
+        {rovers()}
       </div>
     </>
   );

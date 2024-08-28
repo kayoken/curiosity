@@ -1,18 +1,17 @@
 import starfleet from "/public/starfleet.svg";
 
 interface RoverProps {
-  rotation: number;
+  rotation: string;
   position: [number, number];
 }
 
 const Rover: React.FC<RoverProps> = ({ rotation, position }) => {
-  const CARDINALS = ["N", "E", "S", "W"];
-
+  //for div mapping
   const MULTIPLIER = 120;
 
   return (
     <div
-      className={"rover " + CARDINALS[rotation]}
+      className={"rover " + rotation}
       style={{
         bottom: position[0] * MULTIPLIER,
         left: position[1] * MULTIPLIER,
