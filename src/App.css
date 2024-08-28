@@ -55,7 +55,7 @@ button.add:hover {
 
 .rover {
   position: absolute;
-  transition: all 0.25s;
+  transition: all 0.5s;
   width: 120px;
   height: 120px;
   border-top-left-radius: 100%;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import Logo from "/public/NASA_logo.svg";
 import Grid from "./components/Grid";
-import commands from "./assets/commands.txt";
+import messageFromEarth from "./assets/commands.txt";
 
 function App() {
   const [currentCommands, setCurrentCommands] = useState<string[]>([]);
@@ -12,15 +12,13 @@ function App() {
     return returnVal;
   }
 
-  const text = `5 5
-1 2 N
-LMLMLMLMM
-3 3 E
-MMRMMRMRRM`;
-
   useEffect(() => {
-    const commandsArray = splitCommands(text);
-    setCurrentCommands(commandsArray);
+    fetch(messageFromEarth)
+      .then((r) => r.text())
+      .then((text) => {
+        const commandsArray = splitCommands(text);
+        setCurrentCommands(commandsArray);
+      });
   }, []);
 
   const move = () => {

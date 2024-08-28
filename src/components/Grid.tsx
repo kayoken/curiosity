@@ -5,8 +5,18 @@ interface GridProps {
   commands: string[];
 }
 
+type RoverData = {
+  key: number;
+  rotation: string;
+  position: [number, number];
+};
+
 const Grid: React.FC<GridProps> = ({ commands }) => {
-  const [roverData, setRoverData] = useState(0);
+  const [roverData, setRoverData] = useState<[RoverData, RoverData]>([
+    { key: 0, rotation: "N", position: [1, 2] },
+    { key: 1, rotation: "E", position: [3, 3] },
+  ]);
+
   const [gridSize, setGridSize] = useState<[number, number]>([0, 0]);
   const [currentCommands, setCurrentCommands] = useState<string[][]>([]);
 
@@ -36,22 +46,17 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
     setCurrentCommands(nextCommands.slice(1, nextCommands.length));
   };
 
-  const moveRover = () => {
-    if (currentCommands.length > 2) {
-      console.log("works");
-    }
-
-    console.log(currentCommands);
-  };
-
   useEffect(() => {
     setupPlanet();
   }, [commands]);
 
   useEffect(() => {
     const stepTimer = setTimeout(() => {
-      const nextCommands = [...currentCommands];
-      setCurrentCommands(nextCommands.slice(1, nextCommands.length));
+      if (currentCommands.length) {
+        const nextCommands = [...currentCommands];
+        console.log(nextCommands[0]);
+        setCurrentCommands(nextCommands.slice(1, nextCommands.length));
+      }
     }, 4000);
 
     console.log(currentCommands);
@@ -62,8 +67,16 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
   const rovers = () => {
     return (
       <>
-        <Rover key={0} rotation={"N"} position={[1, 2]} />
-        {/* <Rover key={1} rotation={"E"} position={[3, 3]} /> */}
+        <Rover
+          key={roverData[0].key}
+          rotation={roverData[0].rotation}
+          position={roverData[0].position}
+        />
+        <Rover
+          key={roverData[1].key}
+          rotation={roverData[1].rotation}
+          position={roverData[1].position}
+        />
       </>
     );
   };
