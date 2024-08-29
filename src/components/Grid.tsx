@@ -15,8 +15,8 @@ export const CARDINALS = ["N", "E", "S", "W"];
 
 //think about setting up the grid with a state setup function
 const Grid: React.FC<GridProps> = ({ commands }) => {
-  const [roverData, setRoverData] = useState<[RoverData]>([
-    { id: 0, rotation: "N", position: [-40, -40] },
+  const [roverData, setRoverData] = useState<RoverData[]>([
+    { id: 0, rotation: "Z", position: [-40, -40] },
   ]);
 
   const [gridSize, setGridSize] = useState<[number, number]>([0, 0]);
@@ -34,7 +34,7 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
       if (nextCommands[0].length !== 1) {
         landRover(nextCommands[0]);
       } else {
-        moveRover(nextCommands[0]);
+        controlRover(nextCommands[0]);
       }
       setCurrentCommands(nextCommands.slice(1, nextCommands.length));
     }
@@ -56,7 +56,6 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
   };
 
   const landRover = (positionCommand: any) => {
-    const roverCopy = [...roverData];
     setRoverData([
       {
         id: 0,
@@ -67,17 +66,50 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
   };
 
   const rotateRover = (rotateCommand: string) => {
-    const nextRoverData = [...roverData];
+    setRoverData((prevRoverData) => {
+      const nextRoverData = [...prevRoverData];
+
+      let index = CARDINALS.findIndex(
+        (value) => value === nextRoverData[0].rotation
+      );
+
+      if (rotateCommand === "L") {
+        index--;
+      } else {
+        index++;
+      }
+
+      //TODO: make a const for CARDINALS.length - 1
+      if (index < 0) {
+        index = CARDINALS.length - 1;
+      }
+      if (index > CARDINALS.length - 1) {
+        index = 0;
+      }
+
+      nextRoverData[0] = {
+        ...nextRoverData[0],
+        rotation: CARDINALS[index],
+      };
+
+      return nextRoverData;
+    });
   };
 
-  const moveRover = (moveCommand: string[]) => {
-    const moveArray = moveCommand[0].split("");
+  const moveRover = () => {
+    setRoverData((prevRoverData) => {
+      const nextRoverData = [...prevRoverData];
+      return nextRoverData;
+    });
+  };
 
+  const controlRover = (moveCommand: string[]) => {
+    const moveArray = moveCommand[0].split("");
     moveArray.forEach((move) => {
       if (move === "L" || move === "R") {
         rotateRover(move);
       } else {
-        // moveForward();
+        moveRover();
       }
     });
   };

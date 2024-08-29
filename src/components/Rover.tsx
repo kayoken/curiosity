@@ -10,6 +10,9 @@ const Rover: React.FC<RoverProps> = ({ rotation, position }) => {
   //for div mapping
   const MULTIPLIER = 120;
 
+  //output coordinates
+  //console.log(rotation, position)
+
   return (
     <div
       className={"rover " + rotation}
