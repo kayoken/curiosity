@@ -17,7 +17,7 @@ export const CARDINALS = ["N", "E", "S", "W"];
 const Grid: React.FC<GridProps> = ({ commands }) => {
   const [roverData, setRoverData] = useState<RoverData[]>([]);
 
-  const [currentRoverInLine, setCurrentRoverInLine] = useState<number>(0);
+  const [currentRoverInLine, setCurrentRoverInLine] = useState<number>(-1);
   const [gridSize, setGridSize] = useState<[number, number]>([0, 0]);
   const [currentCommands, setCurrentCommands] = useState<string[][]>([]);
 
@@ -104,6 +104,7 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
   const moveRover = () => {
     setRoverData((prevRoverData) => {
       const nextRoverData = [...prevRoverData];
+
       let nextPosition: [number, number] = [-1, -1];
 
       const currentRotation = prevRoverData[0].rotation;
