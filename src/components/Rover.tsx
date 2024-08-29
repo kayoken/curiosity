@@ -1,5 +1,4 @@
 import starfleet from "/public/starfleet.svg";
-import { CARDINALS } from "./Grid";
 
 interface RoverProps {
   rotation: string;
@@ -11,7 +10,7 @@ const Rover: React.FC<RoverProps> = ({ rotation, position }) => {
   const MULTIPLIER = 120;
 
   //output coordinates
-  console.log(rotation, position);
+  console.log(position, rotation);
 
   return (
     <div

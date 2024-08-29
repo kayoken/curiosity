@@ -15,10 +15,9 @@ export const CARDINALS = ["N", "E", "S", "W"];
 
 //think about setting up the grid with a state setup function
 const Grid: React.FC<GridProps> = ({ commands }) => {
-  const [roverData, setRoverData] = useState<RoverData[]>([
-    { id: 0, rotation: "Z", position: [-40, -40] },
-  ]);
+  const [roverData, setRoverData] = useState<RoverData[]>([]);
 
+  const [currentRoverInLine, setCurrentRoverInLine] = useState<number>(0);
   const [gridSize, setGridSize] = useState<[number, number]>([0, 0]);
   const [currentCommands, setCurrentCommands] = useState<string[][]>([]);
 
@@ -56,13 +55,17 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
   };
 
   const landRover = (positionCommand: any) => {
-    setRoverData([
-      {
-        id: 0,
-        rotation: positionCommand[2],
-        position: [Number(positionCommand[0]), Number(positionCommand[1])],
-      },
-    ]);
+    setRoverData((prevRoverData) => {
+      return [
+        ...prevRoverData,
+        {
+          id: currentRoverInLine,
+          rotation: positionCommand[2],
+          position: [Number(positionCommand[0]), Number(positionCommand[1])],
+        },
+      ];
+    });
+    setCurrentRoverInLine(currentRoverInLine + 1);
   };
 
   const rotateRover = (rotateCommand: string) => {
@@ -159,11 +162,13 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
         className="square"
       >
         <>
-          <Rover
-            key={roverData[0].id}
-            rotation={roverData[0].rotation}
-            position={roverData[0].position}
-          />
+          {roverData.map((rover) => (
+            <Rover
+              key={rover.id}
+              rotation={rover.rotation}
+              position={rover.position}
+            />
+          ))}
         </>
       </div>
     </>
