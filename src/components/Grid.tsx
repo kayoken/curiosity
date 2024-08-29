@@ -107,31 +107,31 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
 
       let nextPosition: [number, number] = [-1, -1];
 
-      const currentRotation = prevRoverData[0].rotation;
+      const currentRotation = nextRoverData[currentRoverInLine].rotation;
 
       switch (currentRotation) {
         case "N":
           nextPosition = [
-            prevRoverData[0].position[0],
-            prevRoverData[0].position[1] + 1,
+            nextRoverData[currentRoverInLine].position[0],
+            nextRoverData[currentRoverInLine].position[1] + 1,
           ];
           break;
         case "E":
           nextPosition = [
-            prevRoverData[0].position[0] + 1,
-            prevRoverData[0].position[1],
+            nextRoverData[currentRoverInLine].position[0] + 1,
+            nextRoverData[currentRoverInLine].position[1],
           ];
           break;
         case "S":
           nextPosition = [
-            prevRoverData[0].position[0],
-            prevRoverData[0].position[1] - 1,
+            nextRoverData[currentRoverInLine].position[0],
+            nextRoverData[currentRoverInLine].position[1] - 1,
           ];
           break;
         case "W":
           nextPosition = [
-            prevRoverData[0].position[0] - 1,
-            prevRoverData[0].position[1],
+            nextRoverData[currentRoverInLine].position[0] - 1,
+            nextRoverData[currentRoverInLine].position[1],
           ];
           break;
       }
