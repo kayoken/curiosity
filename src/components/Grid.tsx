@@ -66,6 +66,8 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
   };
 
   const rotateRover = (rotateCommand: string) => {
+    const indexOfLastElement = CARDINALS.length - 1;
+
     setRoverData((prevRoverData) => {
       const nextRoverData = [...prevRoverData];
 
@@ -81,9 +83,9 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
 
       //TODO: make a const for CARDINALS.length - 1
       if (index < 0) {
-        index = CARDINALS.length - 1;
+        index = indexOfLastElement;
       }
-      if (index > CARDINALS.length - 1) {
+      if (index > indexOfLastElement) {
         index = 0;
       }
 
@@ -99,6 +101,42 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
   const moveRover = () => {
     setRoverData((prevRoverData) => {
       const nextRoverData = [...prevRoverData];
+      let nextPosition: [number, number] = [-1, -1];
+
+      const currentRotation = prevRoverData[0].rotation;
+
+      switch (currentRotation) {
+        case "N":
+          nextPosition = [
+            prevRoverData[0].position[0],
+            prevRoverData[0].position[1] + 1,
+          ];
+          break;
+        case "E":
+          nextPosition = [
+            prevRoverData[0].position[0] + 1,
+            prevRoverData[0].position[1],
+          ];
+          break;
+        case "S":
+          nextPosition = [
+            prevRoverData[0].position[0],
+            prevRoverData[0].position[1] - 1,
+          ];
+          break;
+        case "W":
+          nextPosition = [
+            prevRoverData[0].position[0] - 1,
+            prevRoverData[0].position[1],
+          ];
+          break;
+      }
+
+      nextRoverData[0] = {
+        ...nextRoverData[0],
+        position: nextPosition,
+      };
+
       return nextRoverData;
     });
   };

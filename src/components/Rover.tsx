@@ -11,7 +11,7 @@ const Rover: React.FC<RoverProps> = ({ rotation, position }) => {
   const MULTIPLIER = 120;
 
   //output coordinates
-  //console.log(rotation, position)
+  console.log(rotation, position);
 
   return (
     <div
