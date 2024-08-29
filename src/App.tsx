@@ -21,21 +21,13 @@ function App() {
       });
   }, []);
 
-  const move = () => {
-    console.log(currentCommands);
-  };
-
   return (
     <>
       <h1>
         <img src={Logo} />
       </h1>
       <div className="wrapper">
-        <header>
-          <div className="plus" onClick={move}>
-            <button className="add">+</button>
-          </div>
-        </header>
+        <header></header>
 
         <div className="plateau">
           <div className="line">

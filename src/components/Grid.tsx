@@ -6,30 +6,39 @@ interface GridProps {
 }
 
 type RoverData = {
-  key: number;
+  id: number;
   rotation: string;
   position: [number, number];
 };
 
+export const CARDINALS = ["N", "E", "S", "W"];
+
+//think about setting up the grid with a state setup function
 const Grid: React.FC<GridProps> = ({ commands }) => {
-  const [roverData, setRoverData] = useState<[RoverData, RoverData]>([
-    { key: 0, rotation: "N", position: [1, 2] },
-    { key: 1, rotation: "E", position: [3, 3] },
+  const [roverData, setRoverData] = useState<[RoverData]>([
+    { id: 0, rotation: "N", position: [-40, -40] },
   ]);
 
   const [gridSize, setGridSize] = useState<[number, number]>([0, 0]);
   const [currentCommands, setCurrentCommands] = useState<string[][]>([]);
 
-  //   const consumeLine = () => {
-  //     if (currentCommands.length) {
-  //       const nextCommands = [...currentCommands];
-  //       const currentCommand = nextCommands[0];
-  //       setCurrentCommands(nextCommands.slice(1, nextCommands.length));
-  //       return currentCommand;
-  //     }
+  //planet setup
+  useEffect(() => {
+    setupPlanet();
+  }, [commands]);
 
-  //     return [""];
-  //   };
+  useEffect(() => {
+    if (currentCommands.length) {
+      const nextCommands = [...currentCommands];
+
+      if (nextCommands[0].length !== 1) {
+        landRover(nextCommands[0]);
+      } else {
+        moveRover(nextCommands[0]);
+      }
+      setCurrentCommands(nextCommands.slice(1, nextCommands.length));
+    }
+  }, [currentCommands]);
 
   const setupPlanet = () => {
     const commandsArray = commands.map((command) => {
@@ -46,39 +55,31 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
     setCurrentCommands(nextCommands.slice(1, nextCommands.length));
   };
 
-  useEffect(() => {
-    setupPlanet();
-  }, [commands]);
+  const landRover = (positionCommand: any) => {
+    const roverCopy = [...roverData];
+    setRoverData([
+      {
+        id: 0,
+        rotation: positionCommand[2],
+        position: [Number(positionCommand[0]), Number(positionCommand[1])],
+      },
+    ]);
+  };
 
-  useEffect(() => {
-    const stepTimer = setTimeout(() => {
-      if (currentCommands.length) {
-        const nextCommands = [...currentCommands];
-        console.log(nextCommands[0]);
-        setCurrentCommands(nextCommands.slice(1, nextCommands.length));
+  const rotateRover = (rotateCommand: string) => {
+    const nextRoverData = [...roverData];
+  };
+
+  const moveRover = (moveCommand: string[]) => {
+    const moveArray = moveCommand[0].split("");
+
+    moveArray.forEach((move) => {
+      if (move === "L" || move === "R") {
+        rotateRover(move);
+      } else {
+        // moveForward();
       }
-    }, 4000);
-
-    console.log(currentCommands);
-
-    return () => clearTimeout(stepTimer);
-  }, [currentCommands]);
-
-  const rovers = () => {
-    return (
-      <>
-        <Rover
-          key={roverData[0].key}
-          rotation={roverData[0].rotation}
-          position={roverData[0].position}
-        />
-        <Rover
-          key={roverData[1].key}
-          rotation={roverData[1].rotation}
-          position={roverData[1].position}
-        />
-      </>
-    );
+    });
   };
 
   return (
@@ -87,7 +88,13 @@ const Grid: React.FC<GridProps> = ({ commands }) => {
         style={{ width: gridSize[0] * 120, height: gridSize[1] * 120 }}
         className="square"
       >
-        {rovers()}
+        <>
+          <Rover
+            key={roverData[0].id}
+            rotation={roverData[0].rotation}
+            position={roverData[0].position}
+          />
+        </>
       </div>
     </>
   );
